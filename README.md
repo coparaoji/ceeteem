@@ -3,7 +3,6 @@
 *Token‑aware Python client for the **Control‑M Automation API***
 
 [![PyPI](https://img.shields.io/pypi/v/ceeteem.svg)](https://pypi.org/project/ceeteem)
-[![Python](https://img.shields.io/pypi/pyversions/ceeteem.svg)](https://pypi.org/project/ceeteem)
 [![License](https://img.shields.io/github/license/coparaoji/ceeteem)](LICENSE)
 
 ---
