@@ -103,7 +103,7 @@ Pull requests welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for a quick gu
 
 ## License
 
-Licensed under the MIT License. See [LICENSE](LICENSE) for details.
+Licensed under the GPL-3.0 License. See [LICENSE](LICENSE) for details.
 
 ---
 
