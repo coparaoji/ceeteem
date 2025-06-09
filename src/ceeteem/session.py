@@ -47,7 +47,11 @@ class ControlMSession(requests.Session):
         ``"https://workbench:8443"``.
     creds : dict[str, str]
         Whatever payload your ``/session/login`` endpoint expects—typically
+        Payload for bearer-token login. **Ignored if `api_key` is supplied.**
         ``{"username": "...", "password": "..."}``.
+    api_key : str | None
+        If set, the session sends `x-api-key: <value>` on every request and
+        skips bearer-token authentication.
     verify : bool | str, default ``True``
         Passed straight to :pyclass:`requests.Session.request`.  Use ``False``
         to disable validation (dev only) **or** provide the path to a PEM file
@@ -64,7 +68,8 @@ class ControlMSession(requests.Session):
     def __init__(
         self,
         base_url: str,
-        creds: Dict[str, str],
+        creds: Dict[str, str] | None = None,
+        api_key: str | None = None,
         *,
         verify: bool | str = True,
         ca_file: Optional[str] = None,
@@ -79,16 +84,21 @@ class ControlMSession(requests.Session):
         # verify precedence: explicit ca_file > verify param > default True
         self.verify = ca_file if ca_file is not None else verify
 
-        # Instantiate custom Auth once and re‑use *this* Session for the
-        # login calls so "verify" settings propagate.
-        self.auth = auth_cls(
-            auth_url=f"{self.base_url}/session/login",
-            auth_payload=creds,
-            session=self,
-            **auth_kwargs,
-        )
+        if api_key:
+            # Straight API-key flow: no bearer auth object
+            self.auth = None
+            self.headers["x-api-key"] = api_key
+        else:
+            if creds is None:
+                raise ValueError("Either 'creds' or 'api_key' must be provided.")
+            self.auth = auth_cls(
+                auth_url=f"{self.base_url}/session/login",
+                auth_payload=creds,
+                session=self,
+                **auth_kwargs,
+            )
 
-        # JSON everywhere 🚀
+        # JSON everywhere!
         self.headers.setdefault("Accept", "application/json")
 
     # ---------------------------------------------------------------------
