@@ -1,6 +1,6 @@
 [project]
 name = "ceeteem"
-version = "0.0.3"
+version = "0.0.4"
 description = "Token-aware Python client for the Control-M/Helix Automation API"
 readme = "README.md"
 authors = [
